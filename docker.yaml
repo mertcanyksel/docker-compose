@@ -51,5 +51,5 @@
     
     - name: ensure git pkg installed
       git: 
-        repo: 'https://github.com/mertcanyksel/docker-compose.yaml.git'
+        repo: 'https://github.com/mertcanyksel/docker-compose.git'
         dest: /home/ubuntu/ansible-nexus
