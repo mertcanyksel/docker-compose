@@ -1,0 +1,40 @@
+---
+
+  - hosts: servers
+    become: true
+    gather_facts: false
+
+    tasks:
+
+    - name: "Update Reposiroty cache"
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
+
+    - name: Install Dependencies
+      apt:
+        pkg:
+          - curl
+          - openssh-server
+          - ca-certificates
+        state: latest
+        update_cache: true
+
+    - name: Install GitLab CE
+      shell: curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.deb.sh | sudo bash
+
+    - name: Install Gitlab CE
+      apt:
+        name: gitlab-ce
+        state: latest
+        update_cache: true
+
+    - name: Set URL
+      shell: sudo ufw allow http && sudo ufw allow https && sudo ufw allow OpenSSH
+
+    - name: Run GitLab
+      shell: "gitlab-ctl reconfigure"
+
+    - name: Run GitLab
+      shell: "gitlab-ctl start"
