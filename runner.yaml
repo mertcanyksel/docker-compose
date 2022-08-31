@@ -1,0 +1,28 @@
+---
+
+  - hosts: all
+    become: true
+    gather_facts: false
+
+    tasks:
+
+      - name: "Update Repository cache" 
+        apt:
+          update_cache: true
+          cache_valid_time: 3600
+          force_apt_get: true	
+
+      - name: Add GitLab Runner repository
+        shell: wget -qO - https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh | sudo bash
+
+      - name: Install GitLab Runner
+        apt:
+          name: gitlab-runner
+          state: latest
+          update_cache: true
+
+      - name: Add GitLab-Runner user to docker group
+        user:
+          name: gitlab-runner
+          append: yes
+          groups: docker
